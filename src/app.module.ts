@@ -1,33 +1,25 @@
 import { CacheModule } from "@nestjs/cache-manager";
 import { Module } from "@nestjs/common";
-import { ConfigModule } from "@nestjs/config";
 import { TerminusModule } from "@nestjs/terminus";
 import { ThrottlerModule } from "@nestjs/throttler";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import { BooksModule } from "./books/books.module";
-import { OpenLibraryModule } from "./open-library/open-library.module";
+import config from "./shared/config/env.config";
 
 @Module({
 	imports: [
-		ConfigModule.forRoot({
-			isGlobal: true,
-			envFilePath: ".env",
-		}),
 		CacheModule.register({
 			isGlobal: true,
-			ttl: 3600,
-			max: 100,
+      ttl: config.get('cache.ttl'),
+      max: config.get('cache.max'),
 		}),
 		ThrottlerModule.forRoot([
 			{
-				ttl: 60000,
-				limit: 10,
+        ttl: config.get('throttler.ttl'),
+        limit: config.get('throttler.limit'),
 			},
 		]),
 		TerminusModule,
-		BooksModule,
-		OpenLibraryModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],

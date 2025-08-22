@@ -1,13 +1,12 @@
-import { ValidationPipe } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
+import { ValidationPipe, VersioningType } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import {
 	FastifyAdapter,
 	type NestFastifyApplication,
 } from "@nestjs/platform-fastify";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import { description, name, version } from "../package.json";
 import { AppModule } from "./app.module";
+import config from "./shared/config/env.config";
 
 async function bootstrap() {
 	const app = await NestFactory.create<NestFastifyApplication>(
@@ -15,12 +14,13 @@ async function bootstrap() {
 		new FastifyAdapter({ logger: true }),
 	);
 
-	const configService = app.get(ConfigService);
-	const port = configService.get<number>("PORT", 3000);
-	const apiPrefix = configService.get<string>("API_PREFIX", "api");
+	const port = config.get("server.port");
+	const apiPrefix = config.get("server.api.prefix");
 
 	app.enableCors();
-
+	app.enableVersioning({
+		type: VersioningType.URI,
+	});
 	app.setGlobalPrefix(apiPrefix);
 
 	app.useGlobalPipes(
@@ -31,14 +31,14 @@ async function bootstrap() {
 		}),
 	);
 
-	const config = new DocumentBuilder()
+	const swaggerConfig = new DocumentBuilder()
 		.setTitle("Book Search API")
-		.setDescription(description)
-		.setVersion(version)
+		.setDescription("API for searching books with HATEOAS support")
+		.setVersion("1.0")
 		.addTag("books")
 		.build();
 
-	const document = SwaggerModule.createDocument(app, config);
+	const document = SwaggerModule.createDocument(app, swaggerConfig);
 	SwaggerModule.setup(`${apiPrefix}/docs`, app, document, {
 		explorer: true,
 		swaggerOptions: {
@@ -48,8 +48,8 @@ async function bootstrap() {
 	});
 
 	await app.listen(port, "0.0.0.0");
-	console.log(`Application is running on: htt
-  console.log(`Swagger documentation: htt
+	console.log(`Application is running on: http://localhost:${port}`);
+	console.log(`Swagger documentation: http://localhost:${port}/${apiPrefix}/docs`);
 }
 
 bootstrap().catch((error) => {
