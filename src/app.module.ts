@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import { BooksModule } from './books/books.module';
 import { OpenLibraryModule } from './open-library/open-library.module';
 import config from './shared/config/env.config';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -21,6 +22,11 @@ import config from './shared/config/env.config';
         limit: config.get('throttler.limit'),
       },
     ]),
+    HttpModule.register({
+      global: true,
+      timeout: 3000,
+      maxRedirects: 3,
+    }),
     TerminusModule,
     BooksModule,
     OpenLibraryModule,

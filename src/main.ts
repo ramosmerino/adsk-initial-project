@@ -18,16 +18,16 @@ async function bootstrap() {
   const apiPrefix = config.get('server.api.prefix');
 
   app.enableCors();
+  app.setGlobalPrefix(apiPrefix);
   app.enableVersioning({
     type: VersioningType.URI,
   });
-  app.setGlobalPrefix(apiPrefix);
-
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true,
-      transform: true,
+      disableErrorMessages: false,
       forbidNonWhitelisted: true,
+      transform: true,
+      whitelist: true,
     }),
   );
 

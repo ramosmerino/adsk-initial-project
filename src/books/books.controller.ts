@@ -1,7 +1,7 @@
-import { Controller, Get, Query, UsePipes } from '@nestjs/common';
+import { Controller, Get, Inject, Query, UsePipes } from '@nestjs/common';
 import { ValidationPipe } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags, ApiQuery } from '@nestjs/swagger';
-import type { BooksService } from './books.service';
+import { BooksService } from './books.service';
 import { SearchBooksDto } from './dto/search-books.dto';
 import { BookSearchResultDto } from './dto/book-response.dto';
 
@@ -11,7 +11,6 @@ export class BooksController {
   constructor(private readonly booksService: BooksService) {}
 
   @Get()
-  @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   @ApiOperation({ summary: 'Search for books by title or author' })
   @ApiResponse({
     status: 200,

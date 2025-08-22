@@ -1,6 +1,6 @@
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import type { Cache } from 'cache-manager';
+import { Cache } from 'cache-manager';
 import axios, { AxiosError } from 'axios';
 import type { SearchBooksDto } from '../books/dto/search-books.dto';
 import type { BookSearchResultDto } from '../books/dto/book-response.dto';
@@ -16,14 +16,12 @@ import { firstValueFrom, catchError } from 'rxjs';
 export class OpenLibraryService {
   private readonly logger = new Logger(OpenLibraryService.name);
   private readonly baseUrl = config.get('openlibrary.baseUrl');
-  private readonly cacheTtl: number;
+  private readonly cacheTtl: number = config.get('cache.ttl');
 
   constructor(
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly httpService: HttpService,
-  ) {
-    this.cacheTtl = config.get('cache.ttl');
-  }
+  ) { }
 
   async searchBooks(searchDto: SearchBooksDto): Promise<BookSearchResultDto> {
     const { query, page = 1, limit = 10 } = searchDto;
@@ -37,7 +35,7 @@ export class OpenLibraryService {
       const books = this.mapBooks(data.docs);
       const result = this.buildResult(query, page, limit, data.numFound, books);
 
-      await this.cacheManager.set(cacheKey, result, this.cacheTtl * 1000);
+      await this.cacheManager.set(cacheKey, result, this.cacheTtl);
       return result;
     } catch (error) {
       this.handleError(error);

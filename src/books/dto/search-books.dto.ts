@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsString,
   IsNotEmpty,
@@ -25,6 +26,7 @@ export class SearchBooksDto {
   @IsNumber()
   @Min(1)
   @IsOptional()
+  @Type(() => Number)
   page?: number = 1;
 
   @ApiProperty({
@@ -37,5 +39,6 @@ export class SearchBooksDto {
   @IsNumber()
   @Min(1)
   @IsOptional()
+  @Type(() => Number)
   limit?: number = 10;
 }
