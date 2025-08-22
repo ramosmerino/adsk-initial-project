@@ -5,6 +5,7 @@ import { ThrottlerModule } from "@nestjs/throttler";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { BooksModule } from "./books/books.module";
+import { OpenLibraryModule } from "./open-library/open-library.module";
 import config from "./shared/config/env.config";
 
 @Module({
@@ -22,6 +23,7 @@ import config from "./shared/config/env.config";
 		]),
 		TerminusModule,
 		BooksModule,
+		OpenLibraryModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],
