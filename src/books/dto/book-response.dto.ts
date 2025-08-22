@@ -16,7 +16,7 @@ export class BookDto {
   @ApiProperty({ example: 'OL82565W' })
   key: string;
 
-  @ApiProperty({ example: 'Harry Potter and the Philosopher\'s Stone' })
+  @ApiProperty({ example: "Harry Potter and the Philosopher's Stone" })
   title: string;
 
   @ApiProperty({

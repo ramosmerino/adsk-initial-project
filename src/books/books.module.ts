@@ -6,10 +6,7 @@ import { BooksService } from './books.service';
 import { OpenLibraryService } from '../open-library/open-library.service';
 
 @Module({
-  imports: [
-    ConfigModule,
-    CacheModule.register(),
-  ],
+  imports: [ConfigModule, CacheModule.register()],
   controllers: [BooksController],
   providers: [BooksService, OpenLibraryService],
   exports: [BooksService],

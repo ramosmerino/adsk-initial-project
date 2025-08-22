@@ -1,4 +1,4 @@
-import convict from 'convict';
+import * as convict from 'convict';
 
 export const config = convict({
   env: {
@@ -60,7 +60,7 @@ export const config = convict({
   openlibrary: {
     baseUrl: {
       doc: 'OpenLibrary API base URL',
-      format: 'url',
+      format: String,
       default: 'https://openlibrary.org',
       env: 'OPENLIBRARY_BASE_URL',
     },
