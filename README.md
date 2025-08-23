@@ -2,84 +2,162 @@
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
+<p align="center">OpenLibrary API Challenge - A NestJS application for searching books using the OpenLibrary API</p>
+<p align="center">
+<a href="https://www.npmjs.com/package/@nestjs/core" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
+<a href="https://www.npmjs.com/package/@nestjs/core" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
+<a href="https://www.npmjs.com/package/@nestjs/common" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
+<a href="https://github.com/nestjs/nest/actions" target="_blank"><img src="https://github.com/nestjs/nest/workflows/CI/badge.svg" alt="CI" /></a>
 <a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This project is a coding challenge for Autodesk that implements a book search service using the OpenLibrary API. The service provides a clean, well-documented API for searching books with features like caching, request validation, and HATEOAS support.
 
-## Project setup
+## Tech Stack
 
-```bash
-$ npm install
+- **Runtime**: Node.js 22.x
+- **Framework**: NestJS 10.x
+- **HTTP Server**: Fastify
+- **Testing**: Jest
+- **Containerization**: Docker
+- **Caching**: Redis
+- **API Documentation**: Swagger/OpenAPI
+
+## Development Installation
+
+### Prerequisites
+
+- Node.js 22.x (recommend using [fnm](https://github.com/Schniz/fnm) or [nvm](https://github.com/nvm-sh/nvm))
+- npm or yarn
+- Docker (optional, for containerized development)
+
+### Setup
+
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd adsk-initial-project
+   ```
+
+2. Install dependencies:
+   ```bash
+   # Using fnm
+   fnm use
+   
+   # Or using nvm
+   nvm use
+   
+   # Install dependencies
+   npm install
+   ```
+
+3. Create a `.env` file based on the example:
+   ```bash
+   cp .env.example .env
+   ```
+
+4. Start the development server:
+   ```bash
+   npm run start:dev
+   ```
+
+5. Access the API documentation at: http://localhost:3000/api
+
+## Docker Installation
+
+1. Build the Docker image:
+   ```bash
+   docker build -t openlibrary-api .
+   ```
+
+2. Run the container:
+   ```bash
+   docker run -p 3000:3000 --env-file .env openlibrary-api
+   ```
+
+3. Access the API at: http://localhost:3000
+
+## API Endpoints
+
+### Search Books
+
+Search for books by title, author, or subject.
+
+**Request:**
+```http
+GET /books/search?q=ulysses&page=1&limit=10
 ```
 
-## Compile and run the project
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+**Response:**
+```json
+{
+  "query": "ulysses",
+  "page": 1,
+  "limit": 10,
+  "total": 42,
+  "books": [
+    {
+      "title": "Ulysses: The corrected text",
+      "author_name": ["James Joyce"],
+      "first_publish_year": 2004,
+      "isbn": ["9780394553733"],
+      "cover_i": 1234567
+    }
+  ],
+  "_links": {
+    "self": "/books/search?q=ulysses&page=1&limit=10",
+    "next": "/books/search?q=ulysses&page=2&limit=10",
+    "prev": null
+  }
+}
 ```
 
-## Run tests
+### Get Book Details
 
-```bash
-# unit tests
-$ npm run test
+Get detailed information about a specific book by its OpenLibrary ID.
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+**Request:**
+```http
+GET /books/OL1234567M
 ```
+
+**Response:**
+```json
+{
+  "title": "Ulysses: The corrected text",
+  "authors": [
+    {
+      "name": "James Joyce",
+      "key": "/authors/OL23919A"
+    }
+  ],
+  "publish_date": "2004-06-26",
+  "description": "Written over a seven-year period, from 1914 to 1921...",
+  "subjects": ["Novel", "Modernism", "Ireland"],
+  "cover": {
+    "small": "http://covers.openlibrary.org/b/id/0012722381-S.jpg",
+    "medium": "http://covers.openlibrary.org/b/id/0012722381-M.jpg",
+    "large": "http://covers.openlibrary.org/b/id/0012722381-L.jpg"
+  },
+  "identifiers": {
+    "isbn_10": ["0394553732"],
+    "isbn_13": ["9780394553733"],
+    "openlibrary": ["OL23096847M"]
+  }
+}
+```
+
+## Contribute
+
+This repository was created as part of a coding challenge for Autodesk and is not currently accepting external contributions. However, if you have suggestions or find any issues, feel free to open an issue.
 
 ## Resources
 
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- [NestJS Documentation](https://docs.nestjs.com)
+- [OpenLibrary API](https://openlibrary.org/developers/api)
+- [Fastify Documentation](https://www.fastify.io/docs/latest/)
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+This project is [MIT licensed](LICENSE).
