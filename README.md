@@ -11,7 +11,7 @@ This project is a coding challenge for Autodesk that implements a book search se
 - **HTTP Server**: Fastify
 - **Testing**: Jest
 - **Containerization**: Docker
-- **Caching**: Redis
+- **Caching**: Redis-compatible in-memory keyv
 - **API Documentation**: Swagger/OpenAPI
 
 ## Development Installation
@@ -19,7 +19,7 @@ This project is a coding challenge for Autodesk that implements a book search se
 ### Prerequisites
 
 - Node.js 22.x (recommend using [fnm](https://github.com/Schniz/fnm) or [nvm](https://github.com/nvm-sh/nvm))
-- npm or yarn
+- npm
 - Docker (optional, for containerized development)
 
 ### Setup

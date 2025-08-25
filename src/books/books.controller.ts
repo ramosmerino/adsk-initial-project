@@ -1,9 +1,8 @@
-import { Controller, Get, Inject, Query, UsePipes } from '@nestjs/common';
-import { ValidationPipe } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags, ApiQuery } from '@nestjs/swagger';
+import { Controller, Get, Query } from '@nestjs/common';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { BooksService } from './books.service';
-import { SearchBooksDto } from './dto/search-books.dto';
 import { BookSearchResultDto } from './dto/book-response.dto';
+import { SearchBooksDto } from './dto/search-books.dto';
 
 @ApiTags('books')
 @Controller('books')

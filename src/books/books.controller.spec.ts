@@ -17,7 +17,7 @@ describe('BooksController', () => {
     items: [
       {
         key: '/works/OL82565W',
-        title: 'Harry Potter and the Philosopher\'s Stone',
+        title: "Harry Potter and the Philosopher's Stone",
         authors: [{ name: 'J.K. Rowling', key: '/authors/OL23919A' }],
         first_publish_year: 1997,
         cover_image: 'https://covers.openlibrary.org/b/id/8406789-M.jpg',
@@ -74,6 +74,7 @@ describe('BooksController', () => {
     });
 
     it('should call service with default pagination values if not provided', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { page, limit, ...rest } = searchDto;
       const expectedDto = { ...rest };
       jest.spyOn(booksService, 'searchBooks').mockResolvedValue(mockBookResult);
@@ -85,9 +86,11 @@ describe('BooksController', () => {
 
     it('should throw BadRequestException when query parameter is missing', async () => {
       const invalidDto = { page: 1, limit: 10 } as unknown as SearchBooksDto;
-      jest.spyOn(booksService, 'searchBooks').mockRejectedValue(
-        new BadRequestException('query should not be empty'),
-      );
+      jest
+        .spyOn(booksService, 'searchBooks')
+        .mockRejectedValue(
+          new BadRequestException('query should not be empty'),
+        );
 
       await expect(controller.searchBooks(invalidDto)).rejects.toThrow(
         BadRequestException,

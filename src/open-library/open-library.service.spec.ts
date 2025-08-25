@@ -1,10 +1,10 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { HttpService } from '@nestjs/axios';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Test, TestingModule } from '@nestjs/testing';
 import { of, throwError } from 'rxjs';
+import type { BookSearchResultDto } from '../books/dto/book-response.dto';
+import type { SearchBooksDto } from '../books/dto/search-books.dto';
 import { OpenLibraryService } from './open-library.service';
-import { SearchBooksDto } from '../books/dto/search-books.dto';
-import { BookSearchResultDto } from '../books/dto/book-response.dto';
 
 describe('OpenLibraryService', () => {
   let service: OpenLibraryService;
@@ -73,7 +73,9 @@ describe('OpenLibraryService', () => {
     }).compile();
 
     service = module.get<OpenLibraryService>(OpenLibraryService);
-    httpService = module.get<HttpService>(HttpService) as jest.Mocked<HttpService>;
+    httpService = module.get<HttpService>(
+      HttpService,
+    ) as jest.Mocked<HttpService>;
     cacheManager = module.get(CACHE_MANAGER);
   });
 
@@ -88,11 +90,11 @@ describe('OpenLibraryService', () => {
   describe('searchBooks', () => {
     it('should return cached result if available', async () => {
       const cacheKey = `search:${mockSearchDto.query}:${mockSearchDto.page}:${mockSearchDto.limit}`;
-      
+
       cacheManager.get.mockResolvedValueOnce(mockBookResult);
-      
+
       const result = await service.searchBooks(mockSearchDto);
-      
+
       expect(result).toEqual(mockBookResult);
       expect(cacheManager.get).toHaveBeenCalledWith(cacheKey);
       expect(httpService.get).not.toHaveBeenCalled();
@@ -100,9 +102,7 @@ describe('OpenLibraryService', () => {
 
     it('should fetch from API and cache the result when not in cache', async () => {
       cacheManager.get.mockResolvedValueOnce(undefined);
-      httpService.get.mockReturnValue(
-        of({ data: mockApiResponse } as any),
-      );
+      httpService.get.mockReturnValue(of({ data: mockApiResponse } as any));
 
       const result = await service.searchBooks(mockSearchDto);
 
@@ -114,7 +114,7 @@ describe('OpenLibraryService', () => {
           }),
         ]),
       });
-      
+
       expect(httpService.get).toHaveBeenCalledWith(
         'https://openlibrary.org/search.json',
         expect.objectContaining({
@@ -126,17 +126,18 @@ describe('OpenLibraryService', () => {
           },
         }),
       );
-      
+
       expect(cacheManager.set).toHaveBeenCalled();
     });
 
     it('should handle API errors properly', async () => {
       cacheManager.get.mockResolvedValueOnce(undefined);
-      const error = new Error('API Error');
-      httpService.get.mockReturnValue(throwError(() => ({
-        response: { data: 'Error' },
-        message: 'API Error',
-      })));
+      httpService.get.mockReturnValue(
+        throwError(() => ({
+          response: { data: 'Error' },
+          message: 'API Error',
+        })),
+      );
 
       await expect(service.searchBooks(mockSearchDto)).rejects.toThrow();
     });
@@ -154,15 +155,11 @@ describe('OpenLibraryService', () => {
       };
 
       cacheManager.get.mockResolvedValueOnce(undefined);
-      httpService.get.mockReturnValue(
-        of({ data: mockResponse } as any),
-      );
+      httpService.get.mockReturnValue(of({ data: mockResponse } as any));
 
       const result = await service.searchBooks(mockSearchDto);
 
-      expect(result.items[0].authors).toEqual([
-        { name: 'Unknown Author' },
-      ]);
+      expect(result.items[0].authors).toEqual([{ name: 'Unknown Author' }]);
     });
   });
 
@@ -179,13 +176,7 @@ describe('OpenLibraryService', () => {
         },
       ];
 
-      const result = (service as any).buildResult(
-        'test',
-        2,
-        10,
-        25,
-        books,
-      );
+      const result = (service as any).buildResult('test', 2, 10, 25, books);
 
       expect(result).toMatchObject({
         items: books,

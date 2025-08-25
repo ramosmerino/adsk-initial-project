@@ -21,7 +21,7 @@ export class OpenLibraryService {
   constructor(
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly httpService: HttpService,
-  ) { }
+  ) {}
 
   async searchBooks(searchDto: SearchBooksDto): Promise<BookSearchResultDto> {
     const { query, page = 1, limit = 10 } = searchDto;
