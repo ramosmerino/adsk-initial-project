@@ -10,9 +10,6 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        test_number: [1, 2]
     steps:
       - uses: actions/checkout@v4
       
@@ -26,25 +23,7 @@ jobs:
         run: npm ci
 
       - name: Run tests
-        run: make test-coverage-${{ matrix.test_number }}
-        
-      - name: Upload coverage to Coveralls
-        uses: coverallsapp/github-action@v2
-        with:
-          flag-name: run-${{ matrix.test_number }}
-          parallel: true
-
-  finish:
-    name: Finish Coverage
-    needs: test
-    if: always()
-    runs-on: ubuntu-latest
-    steps:
-      - name: Coveralls Finished
-        uses: coverallsapp/github-action@v2
-        with:
-          parallel-finished: true
-          carryforward: "run-1,run-2"
+        run: npm run test:cov
 
   build:
     name: Build

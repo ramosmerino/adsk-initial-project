@@ -1,10 +1,5 @@
 # OpenLibrary API Challenge - A NestJS application for searching books using the OpenLibrary API
 
-<p align="center">
-<a href="https://www.npmjs.com/package/@nestjs/core" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://github.com/nestjs/nest/actions" target="_blank"><img src="https://github.com/ramosmerino/adsk-initial-project/workflows/CI/badge.svg" alt="CI" /></a>
-<a href="https://coveralls.io/repos/github/ramosmerino/adsk-initial-project?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/ramosmerino/adsk-initial-project/badge.svg?branch=master#9" alt="Coverage" /></a>
-
 ## Description
 
 This project is a coding challenge for Autodesk that implements a book search service using the OpenLibrary API. The service provides a clean, well-documented API for searching books with features like caching, request validation, and HATEOAS support.
