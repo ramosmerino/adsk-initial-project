@@ -2,7 +2,7 @@
 
 ## Description
 
-This project is a coding challenge for Autodesk that implements a book search service using the OpenLibrary API. The service provides a clean, well-documented API for searching books with features like caching, request validation, and HATEOAS support.
+This project is a coding challenge for Autodesk that implements a book search service using the OpenLibrary API. The service provides a clean API for searching books with features like caching, request validation with HATEOAS support.
 
 ## Tech Stack
 
@@ -26,7 +26,7 @@ This project is a coding challenge for Autodesk that implements a book search se
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/ramosmerino/adsk-initial-project
    cd adsk-initial-project
    ```
 
